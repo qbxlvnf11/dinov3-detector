@@ -56,6 +56,7 @@ class Transformer(nn.Module):
         self.nhead = nhead
         self.two_stage = two_stage
         self.two_stage_num_proposals = two_stage_num_proposals
+        print(' == dinov3.eval.detection.transformer.Transformer two_stage_num_proposals:', two_stage_num_proposals)
         assert norm_type in ["pre_norm", "post_norm"], f"expected norm type is pre_norm or post_norm, get {norm_type}"
 
         if decoder_type == "global_ape":
@@ -235,6 +236,9 @@ class Transformer(nn.Module):
         enc_outputs_coord_unact = self.decoder.bbox_embed[self.decoder.num_layers](output_memory) + output_proposals
 
         topk = self.two_stage_num_proposals
+        # num_proposals = enc_outputs_class.shape[1]
+        # if num_proposals < topk:
+        #     topk = num_proposals
         topk_proposals = torch.topk(enc_outputs_class[..., 0], topk, dim=1)[1]
         topk_coords_unact = torch.gather(enc_outputs_coord_unact, 1, topk_proposals.unsqueeze(-1).repeat(1, 1, 4))
         topk_coords_unact = topk_coords_unact.detach()
@@ -290,7 +294,7 @@ class Transformer(nn.Module):
             ) = self.get_reference_points(memory, mask_flatten, spatial_shapes)
             init_reference_out = reference_points
             pos_trans_out = torch.zeros((bs, self.two_stage_num_proposals, 2 * c), device=init_reference_out.device)
-            pos_trans_out = self.pos_trans_norm(self.pos_trans(self.get_proposal_pos_embed(reference_points)))
+            pos_trans_out[:, :reference_points.shape[1], :] = self.pos_trans_norm(self.pos_trans(self.get_proposal_pos_embed(reference_points)))
 
             if not self.mixed_selection:
                 query_embed, tgt = torch.split(pos_trans_out, c, dim=2)
