@@ -26,7 +26,7 @@ python demo.py
 * Run Detection
     * Weights of backbone path: 'weights/dinov3_vit7b16_pretrain_lvd1689m-a955f4ea.pth'
     * Weights of detector head path: 'weights/dinov3_vit7b16_coco_detr_head-b0235ff7.pth'
-    * Adjust `<fps_in>`
+    * Adjust `fps_in` variables
 
 ```
 python demo_detection.py --video_path {input_video_path} --conf_thresh {conf_score_thr} --max_time_sec {max_seconds_of_ --output_video} --output_path {save_video_path}
