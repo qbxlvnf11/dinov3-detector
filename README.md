@@ -33,6 +33,18 @@ python demo_detection.py --video_path {input_video_path} --conf_thresh {conf_sco
 ```
 
 
+Author
+=============
+
+#### - [LinkedIn](https://www.linkedin.com/in/taeyong-kong-016bb2154)
+
+#### - [Blog](https://blog.naver.com/qbxlvnf11)
+
+#### - Email: qbxlvnf11@google.com, qbxlvnf11@naver.com
+
+
+
+
 
 
 
